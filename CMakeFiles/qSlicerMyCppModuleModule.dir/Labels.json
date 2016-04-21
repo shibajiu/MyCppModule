@@ -1,0 +1,71 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModule.cxx"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModule.h"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModuleWidget.cxx"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModuleWidget.h"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModule.cxx"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModuleWidget.cxx"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/ui_qSlicerMyCppModuleModuleWidget.h"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qrc_qSlicerMyCppModuleModule.cxx"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qrc_qSlicer.cxx"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/CMakeLists.txt"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModule.cxx.rule"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModuleWidget.cxx.rule"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/Resources/UI/qSlicerMyCppModuleModuleWidget.ui"
+		},
+		
+		{
+			"file" : "C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/Resources/qSlicerMyCppModuleModule.qrc"
+		},
+		
+		{
+			"file" : "D:/Slicer/Resources/qSlicer.qrc"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "qSlicerMyCppModuleModule" ],
+		"name" : "qSlicerMyCppModuleModule"
+	}
+}

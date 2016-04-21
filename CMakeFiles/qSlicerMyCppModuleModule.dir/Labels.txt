@@ -1,0 +1,18 @@
+# Target labels
+ qSlicerMyCppModuleModule
+# Source files and their labels
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModule.cxx
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModule.h
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModuleWidget.cxx
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qSlicerMyCppModuleModuleWidget.h
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModule.cxx
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModuleWidget.cxx
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/ui_qSlicerMyCppModuleModuleWidget.h
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qrc_qSlicerMyCppModuleModule.cxx
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/qrc_qSlicer.cxx
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/CMakeLists.txt
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModule.cxx.rule
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/moc_qSlicerMyCppModuleModuleWidget.cxx.rule
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/Resources/UI/qSlicerMyCppModuleModuleWidget.ui
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/Resources/qSlicerMyCppModuleModule.qrc
+D:/Slicer/Resources/qSlicer.qrc

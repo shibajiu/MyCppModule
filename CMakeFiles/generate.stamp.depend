@@ -1,0 +1,10 @@
+# CMake generation dependency list for this directory.
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/CMakeLists.txt
+D:/Slicer/CMake/qSlicerExport.h.in
+E:/hit/cmake-3.4.3-win32-x86/share/cmake-3.4/Modules/CMakeConfigurableFile.in
+E:/hit/cmake-3.4.3-win32-x86/share/cmake-3.4/Modules/CMakeConfigurableFile.in
+C:/s/Slicer-build/bin/code/MyExtension/MyCppModule/Resources/qSlicerMyCppModuleModule.qrc
+D:/Slicer/Resources/qSlicer.qrc
+D:/Slicer/Base/QTGUI/Testing/Cxx/qSlicerModuleGenericTest.cxx.in
+D:/Slicer/Base/QTGUI/Testing/Cxx/qSlicerModuleWidgetGenericTest.cxx.in
+E:/hit/cmake-3.4.3-win32-x86/share/cmake-3.4/Templates/TestDriver.cxx.in

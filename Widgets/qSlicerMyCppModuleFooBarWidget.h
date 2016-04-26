@@ -24,7 +24,7 @@
 // Qt includes
 #include "widget.h"
 #include <QScrollArea>
-#include "objload.h"
+
 
 // FooBar Widgets includes
 #include "qSlicerMyCppModuleModuleWidgetsExport.h"
@@ -56,7 +56,7 @@ private:
   Q_DISABLE_COPY(qSlicerMyCppModuleFooBarWidget);  
   GLWidget *glWidget;
   QFileDialog *objfileDialog;
-  QString objfilepath;
+  QString objfilepath;  
 
   void OpenObjFile();
 

@@ -5,11 +5,11 @@ int ObjLoad::Obj_Load(QString ObjPath, QList<Face> obj)
 {
     init();
     obj.clear();
-    QStringList temp;
+    QStringList temp;    
 
     QFile ObjFile(ObjPath);
     if(!ObjFile.open(QIODevice::ReadOnly|QIODevice::Text))
-        return -1;
+        return 0;
     QTextStream ObjStream(&ObjFile);
     QString ObjLine;
     while (!ObjStream.atEnd()) {//get vertices,faces,normals

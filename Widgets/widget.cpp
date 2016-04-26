@@ -15,7 +15,7 @@ GLWidget::GLWidget(QWidget *parent) :
 
     isObjOn=false;
 
-    QTimer *timer = new QTimer(this);
+    timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(alwaysRotate()));
     timer->start(70);
 }
@@ -32,7 +32,12 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glPushMatrix();
-    drawTriangle();
+    if(isObjOn){
+        drawObj();
+    }
+    else {
+        drawTriangle();
+    }
     glPopMatrix();
 }
 
@@ -114,6 +119,20 @@ void GLWidget::drawTriangle()
     }
 }
 
+void GLWidget::drawObj()//draw obj
+{
+    glLoadIdentity();
+    glBegin(GL_TRIANGLES);
+
+    for(int i=0;i<ObjFace.length();i++){
+        qglColor(faceColors[i]);
+		glVertex3f(ObjFace[i].a.x,ObjFace[i].a.y,ObjFace[i].a.z);
+		glVertex3f(ObjFace[i].b.x,ObjFace[i].b.y,ObjFace[i].b.z);
+		glVertex3f(ObjFace[i].c.x,ObjFace[i].c.y,ObjFace[i].c.z);
+    }
+    glEnd();
+}
+
 void GLWidget::normalizeAngle(int *angle)
 {
     while (*angle < 0)
@@ -127,7 +146,7 @@ void GLWidget::setXRotation(int angle)
     normalizeAngle(&angle);
     if ( angle != xRot ) {
         xRot = angle;
-        emit xRotationChanged(angle);
+//        emit xRotationChanged(angle);
         updateGL();
     }
 }
@@ -137,7 +156,7 @@ void GLWidget::setYRotation(int angle)
     normalizeAngle(&angle);
     if ( angle != yRot ) {
         yRot = angle;
-        emit yRotationChanged(angle);
+//        emit yRotationChanged(angle);
         updateGL();
     }
 }
@@ -147,7 +166,7 @@ void GLWidget::setZRotation(int angle)
     normalizeAngle(&angle);
     if ( angle != zRot ) {
         zRot = angle;
-        emit zRotationChanged(angle);
+//        emit zRotationChanged(angle);
         updateGL();
     }
 }
@@ -155,7 +174,7 @@ void GLWidget::setZRotation(int angle)
 void GLWidget::alwaysRotate()
 {
     zRot += 2;
-    emit zRotationChanged(zRot);
+//    emit zRotationChanged(zRot);
     updateGL();
 }
 
@@ -169,3 +188,11 @@ void GLWidget::alwaysRotate()
 //        objfilepath = objfileDialog->selectedFiles()[0];
 //    }
 //}
+
+void GLWidget::ImportObjFile(QString path)
+{    
+    if(obj.Obj_Load(path,ObjFace)==1){
+        isObjOn=true;
+        timer->stop();
+    }
+}

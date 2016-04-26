@@ -8,6 +8,8 @@
 #include <QFileDialog>
 #include "gl/GLU.h"
 #include "math.h"
+#include "objload.h"
+
 
 class GLWidget : public QGLWidget
 {
@@ -20,15 +22,20 @@ public:
     int yRotation() const { return yRot; }
     int zRotation() const { return zRot; }
 
-signals:
-    void xRotationChanged(int angle);
-    void yRotationChanged(int angle);
-    void zRotationChanged(int angle);
-    
-public slots:
+    void ImportObjFile(QString path);//import obj file from path using ObjLoad
     void setXRotation(int angle);
     void setYRotation(int angle);
     void setZRotation(int angle);
+
+//signals:
+//    void xRotationChanged(int angle);
+//    void yRotationChanged(int angle);
+//    void zRotationChanged(int angle);
+    
+//public slots:
+//    void setXRotation(int angle);
+//    void setYRotation(int angle);
+//    void setZRotation(int angle);
 
 protected:
     void initializeGL();
@@ -39,11 +46,12 @@ protected:
 //    void keyPressEvent(QKeyEvent * event);
 
 private slots:
-    void alwaysRotate();
-    void drawTriangle();
+    void alwaysRotate();    
 
 private:
     void normalizeAngle(int *angle);
+    void drawTriangle();
+    void drawObj();
 //    void OpenObjFile();
 
     int xRot;
@@ -52,8 +60,11 @@ private:
 //    QFileDialog *objfileDialog;
     QColor faceColors[4];
     QPoint lastPos;
-    QString objfilepath;
+    ObjLoad obj;
+//    QString objfilepath;
     bool isObjOn;
+    QList<ObjLoad::Face> ObjFace;
+    QTimer *timer;
 };
 
 #endif // WIDGET_H

@@ -100,6 +100,7 @@ void qSlicerMyCppModuleFooBarWidget
     objfileDialog->setFilter(tr("Obj Files(*.obj)"));
     if(objfileDialog->exec() == QDialog::Accepted) {
         objfilepath = objfileDialog->selectedFiles()[0];
+        glWidget->ImportObjFile(objfilepath);
     }
 }
 

@@ -19,7 +19,7 @@ public:
         float y;
         float z;
         void set(QStringList sl){
-            this->x=sl[1].toFloat();
+			this->x=sl[1].toFloat();
             this->y=sl[2].toFloat();
             this->z=sl[3].toFloat();
         }

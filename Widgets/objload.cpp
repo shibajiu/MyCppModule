@@ -95,5 +95,46 @@ QList<float> ObjLoad::Kalman(QList<int> prior, QList<int> z, QList<float> p, QLi
     }
     return xpost;
 }
+void ObjLoad::unitest()
+{
+    int temp=0;
+    isgetobj("E:\\hit\\test\\testtriangle\\testtriangle\\2.obj",temp);
+QMessageBox::information(NULL, "unitest", QString::number(temp), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+}
 
+void ObjLoad::isgetobj(QString ObjPath,int &objlength)
+{
+    init();
+    QList<Face> obj;
+    QStringList temp;
+
+    QFile ObjFile(ObjPath);
+    if(!ObjFile.open(QIODevice::ReadOnly|QIODevice::Text))
+        return;
+    QTextStream ObjStream(&ObjFile);
+    QString ObjLine;
+    while (!ObjStream.atEnd()) {//get vertices,faces,normals
+        ObjLine=ObjStream.readLine();
+        temp=ObjLine.split(" ");
+        if(temp[0]=="v") {
+            vertextemp.set(temp);
+            Vertices.append(vertextemp);
+        }
+        else if (temp[0]=="f") {
+            faceindextemp.set(temp);
+            Indexs.append(faceindextemp);
+        }
+        else if (temp[0]=="n") {
+            normaltemp.set(temp);
+            Normals.append(normaltemp);
+        }
+    }
+    ObjFile.close();//close file
+
+    objlength=Indexs.length();
+//    for(int i=0;i<len;++i){
+//        facetemp.set(Vertices,Indexs[i]);
+//        obj.append(facetemp);
+//    }
+}
 

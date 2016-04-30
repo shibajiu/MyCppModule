@@ -75,6 +75,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     lastPos = event->pos();
 }
 
+void GLWidget::wheelEvent(QWheelEvent *event)
+{
+    zTra+=event->delta()/120;
+    updateGL();
+}
+
 //void GLWidget::keyPressEvent(QKeyEvent * event)
 //{
 //    switch (event->key()) {
@@ -102,7 +108,7 @@ void GLWidget::drawTriangle()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -10.0);
+    glTranslatef(0.0, 0.0, -10.0+zTra);
     glRotatef(xRot, 1.0, 0.0, 0.0);
     glRotatef(yRot, 0.0, 1.0, 0.0);
     glRotatef(zRot, 0.0, 0.0, 1.0);
@@ -121,15 +127,21 @@ void GLWidget::drawTriangle()
 
 void GLWidget::drawObj()//draw obj
 {
+        glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glTranslatef(0.0, 0.0, -10.0+zTra);
+    glRotatef(xRot, 1.0, 0.0, 0.0);
+    glRotatef(yRot, 0.0, 1.0, 0.0);
+    glRotatef(zRot, 0.0, 0.0, 1.0);
     glBegin(GL_TRIANGLES);
-
-    for(int i=0;i<ObjFace.length();i++){
-        qglColor(faceColors[i]);
-		glVertex3f(ObjFace[i].a.x,ObjFace[i].a.y,ObjFace[i].a.z);
-		glVertex3f(ObjFace[i].b.x,ObjFace[i].b.y,ObjFace[i].b.z);
-		glVertex3f(ObjFace[i].c.x,ObjFace[i].c.y,ObjFace[i].c.z);
+qglColor(Qt::green);
+    for(int i=0;i<ObjFace.length();i++){        
+        glVertex3f(ObjFace[i].a.x,ObjFace[i].a.y,ObjFace[i].a.z);
+        glVertex3f(ObjFace[i].b.x,ObjFace[i].b.y,ObjFace[i].b.z);
+        glVertex3f(ObjFace[i].c.x,ObjFace[i].c.y,ObjFace[i].c.z);
     }
+//    QMessageBox::information(NULL, "Title", ObjFace[ObjFace.length()-1].toQString(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    glFlush();
     glEnd();
 }
 
@@ -191,8 +203,11 @@ void GLWidget::alwaysRotate()
 
 void GLWidget::ImportObjFile(QString path)
 {    
-    if(obj.Obj_Load(path,ObjFace)==1){
-        isObjOn=true;
-        timer->stop();
-    }
+//    if(obj.Obj_Load(path,ObjFace)==1){
+//        isObjOn=true;
+//        timer->stop();
+//    }
+    ObjFace=obj.Obj_Load(path);
+    isObjOn=true;
+    timer->stop();
 }

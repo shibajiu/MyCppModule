@@ -43,6 +43,7 @@ protected:
     void resizeGL(int w, int h);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+	void wheelEvent(QWheelEvent *event);
 //    void keyPressEvent(QKeyEvent * event);
 
 private slots:
@@ -57,6 +58,7 @@ private:
     int xRot;
     int yRot;
     int zRot;
+	int zTra;
 //    QFileDialog *objfileDialog;
     QColor faceColors[4];
     QPoint lastPos;

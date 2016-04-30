@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QList>
 #include <QStringList>
+#include <QMessageBox>
 
 class ObjLoad
 {
@@ -26,6 +27,7 @@ public:
     };
 
     struct FaceIndex{//face index
+        public:
         int a;
         int b;
         int c;
@@ -44,7 +46,7 @@ public:
             this->x=sl[1].toFloat();
             this->y=sl[2].toFloat();
             this->z=sl[3].toFloat();
-        }
+        }        
     };
 
     struct Face{
@@ -56,15 +58,23 @@ public:
             this->b=ver[ind.b-1];
             this->c=ver[ind.c-1];
         }
+        QString toQString(){
+            QString temp="a.x:"+QString::number(this->a.x)+"\ta.y:"+QString::number(this->a.y)+"\ta.z:"+QString::number(this->a.z)+"\n"
+                    +"b.x:"+QString::number(this->b.x)+"\tb.y:"+QString::number(this->b.y)+"\tb.z:"+QString::number(this->b.z)+"\n"
+                    +"c.x:"+QString::number(this->c.x)+"\tc.y:"+QString::number(this->c.y)+"\tc.z:"+QString::number(this->c.z);
+            return temp;
+        }
     };
 
 public:
     int Obj_Load(QString ObjPath, QList<Face> obj);
     QList<Face> Obj_Load(QString ObjPath);
     QList<float> Kalman(QList<int> prior, QList<int> z, QList<float> p, QList<float> Q, QList<float> R);
+    void unitest();//for test
 
 private:
     void init();
+    void isgetobj(QString ObjPath, int &objlength);
 
 private:
     QList<Vertex> Vertices;

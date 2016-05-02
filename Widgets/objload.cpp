@@ -1,10 +1,10 @@
 #include "objload.h"
 
 
-int ObjLoad::Obj_Load(QString ObjPath, QList<Face> obj)
+int ObjLoad::Obj_Load(QString ObjPath, QList<Face> *obj)
 {
     init();
-    obj.clear();
+    obj->clear();
     QStringList temp;    
 
     QFile ObjFile(ObjPath);
@@ -18,6 +18,8 @@ int ObjLoad::Obj_Load(QString ObjPath, QList<Face> obj)
         if(temp[0]=="v") {
             vertextemp.set(temp);
             Vertices.append(vertextemp);
+            MaxPoint.findMaxAbs(vertextemp);
+            MinPoint.findMinAbs(vertextemp);
         }
         else if (temp[0]=="f") {
             faceindextemp.set(temp);
@@ -33,7 +35,7 @@ int ObjLoad::Obj_Load(QString ObjPath, QList<Face> obj)
     int len=Indexs.length();
     for(int i=0;i<len;++i){
         facetemp.set(Vertices,Indexs[i]);
-        obj.append(facetemp);
+        obj->append(facetemp);
     }
 
     return 1;
@@ -56,6 +58,8 @@ QList<ObjLoad::Face> ObjLoad::Obj_Load(QString ObjPath)
         if(temp[0]=="v") {
             vertextemp.set(temp);
             Vertices.append(vertextemp);
+            MaxPoint.findMaxAbs(vertextemp);
+            MinPoint.findMinAbs(vertextemp);
         }
         else if (temp[0]=="f") {
             faceindextemp.set(temp);
@@ -82,6 +86,9 @@ void ObjLoad::init()
     Indexs.clear();
     Vertices.clear();
     Faces.clear();
+
+    MaxPoint.init();
+    MinPoint.init();
 }
 
 QList<float> ObjLoad::Kalman(QList<int> prior, QList<int> z, QList<float> p, QList<float> Q, QList<float> R){
@@ -105,7 +112,6 @@ QMessageBox::information(NULL, "unitest", QString::number(temp), QMessageBox::Ye
 void ObjLoad::isgetobj(QString ObjPath,int &objlength)
 {
     init();
-    QList<Face> obj;
     QStringList temp;
 
     QFile ObjFile(ObjPath);

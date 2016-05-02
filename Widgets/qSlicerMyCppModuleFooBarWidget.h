@@ -54,7 +54,7 @@ protected:
 private:
   Q_DECLARE_PRIVATE(qSlicerMyCppModuleFooBarWidget);
   Q_DISABLE_COPY(qSlicerMyCppModuleFooBarWidget);  
-  GLWidget *glWidget;
+  Widget *glWidget;
   QFileDialog *objfileDialog;
   QString objfilepath;  
 

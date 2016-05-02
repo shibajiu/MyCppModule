@@ -19,10 +19,65 @@ public:
         float x;
         float y;
         float z;
+
         void set(QStringList sl){
 			this->x=sl[1].toFloat();
             this->y=sl[2].toFloat();
             this->z=sl[3].toFloat();
+        }
+
+        void set(float xf,float yf,float zf){
+            this->x=xf;
+            this->y=yf;
+            this->z=zf;
+        }
+
+        float getMax(){
+            return qMax(qMax(this->x,this->y),qMax(this->y,this->z));
+        }
+
+        float getMin(){
+            return qMin(qMin(this->x,this->y),qMin(this->y,this->z));
+        }
+
+        void init(){
+            this->set(0,0,0);
+        }
+
+        void setX(float xf){
+            this->x=xf;
+        }
+
+        void setY(float yf){
+            this->y=yf;
+        }
+
+        void setZ(float zf){
+            this->z=zf;
+        }
+
+        /**
+        use to find the view volume
+        **/
+        void findMaxAbs(Vertex cmp){
+            if(qAbs(this->x)<qAbs(cmp.x))
+                this->setX(cmp.x);
+            if(qAbs(this->y)<qAbs(cmp.y))
+                this->setY(cmp.y);
+            if(qAbs(this->z)<qAbs(cmp.z))
+                this->setZ(cmp.z);
+        }
+
+        /**
+        use to find the view volume
+        **/
+        void findMinAbs(Vertex cmp){
+            if(qAbs(this->x)>qAbs(cmp.x))
+                this->setX(cmp.x);
+            if(qAbs(this->y)>qAbs(cmp.y))
+                this->setY(cmp.y);
+            if(qAbs(this->z)>qAbs(cmp.z))
+                this->setZ(cmp.z);
         }
     };
 
@@ -67,7 +122,7 @@ public:
     };
 
 public:
-    int Obj_Load(QString ObjPath, QList<Face> obj);
+    int Obj_Load(QString ObjPath, QList<Face> *obj);
     QList<Face> Obj_Load(QString ObjPath);
     QList<float> Kalman(QList<int> prior, QList<int> z, QList<float> p, QList<float> Q, QList<float> R);
     void unitest();//for test
@@ -84,7 +139,7 @@ private:
     Face facetemp;
     Normal normaltemp;
     FaceIndex faceindextemp;
-    Vertex vertextemp;
+    Vertex vertextemp,MaxPoint,MinPoint;
 
 };
 

@@ -1,101 +1,93 @@
 #include "widget.h"
 
 
-GLWidget::GLWidget(QWidget *parent) :
+Widget::Widget(QGLWidget *parent) :
     QGLWidget(parent)
 {
     xRot = 0;
-    yRot = 0;
-    zRot = 0;
+        yRot = 0;
+        zRot = 0;
+        AngToRad=Pi/180;
+        isObjOn=false;
+        isTest=false;
+        zTra=0;
 
-    faceColors[0] = Qt::red;
-    faceColors[1] = Qt::green;
-    faceColors[2] = Qt::blue;
-    faceColors[3] = Qt::yellow;
+        faceColors[0] = Qt::red;
+        faceColors[1] = Qt::green;
+        faceColors[2] = Qt::blue;
+        faceColors[3] = Qt::yellow;
 
-    isObjOn=false;
-
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(alwaysRotate()));
-    timer->start(70);
+        timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(alwaysRotate()));
+        timer->start(70);
+//        obj.unitest();
+        ImportObjFile("E:\\hit\\test\\testtriangle\\testtriangle\\2.obj");
 }
 
-void GLWidget::initializeGL()
+Widget::~Widget()
 {
-    glClearColor(0.0, 0.2, 0.3, 1.0);
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH);
 }
 
-void GLWidget::paintGL()
+void Widget::initializeGL()
+{
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_DEPTH_TEST);
+}
+
+static float radius = 50.5f;
+
+void Widget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glPushMatrix();
+    glLoadIdentity();
+//    gluLookAt(radius*qCos(AngToRad*xRot), yRot, radius*qSin(AngToRad*xRot), 0, 0, 0, 0, 1, 0);
     if(isObjOn){
         drawObj();
     }
     else {
         drawTriangle();
     }
-    glPopMatrix();
+    glFlush();
 }
 
-void GLWidget::resizeGL(int w, int h)
+void Widget::resizeGL(int w, int h)
 {
-    int side = qMin(w, h);
-    glViewport((width() - side) / 2, (height() - side) / 2, side, side);
-
+    glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1.2, 1.2, -1.2, 1.2, 5.0, 60.0);
+    gluPerspective(90.0f, (float)w / h, 1.0f, 1000.0f);
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0, 0.0, -40.0);
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event)
+void Widget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent *event)
+void Widget::mouseMoveEvent(QMouseEvent *event)
 {
     int dx = event->x() - lastPos.x();
     int dy = event->y() - lastPos.y();
-
-    if (event->buttons() & Qt::LeftButton) {
-        (xRot + 4 * dx);
-        setYRotation(yRot + 4 * dy);
-    } else if (event->buttons() & Qt::RightButton) {
-        (xRot + 4 * dy);
-        setZRotation(zRot + 4 * dx);
-    }
+    yRot+=4 * dy;
+    xRot+=4 * dx;
+    if (yRot>30.0f)
+        yRot=30.0f;
+    else if (yRot<-30.0f)
+        yRot=-30.0f;
+    updateGL();
 
     lastPos = event->pos();
 }
 
-void GLWidget::wheelEvent(QWheelEvent *event)
+void Widget::wheelEvent(QWheelEvent *event)
 {
     zTra+=event->delta()/120;
+    radius+=event->delta()/120;
     updateGL();
 }
 
-//void GLWidget::keyPressEvent(QKeyEvent * event)
-//{
-//    switch (event->key()) {
-//    case Qt::Key_L:{
-
-//        break;
-//    }
-//    case Qt::Key_O:{
-//        OpenObjFile();
-//        break;
-//    }
-//    }
-//}
-
-void GLWidget::drawTriangle()
+void Widget::drawTriangle()
 {
     static const GLfloat P1[3] = { 0.0, -1.0, +2.0 };
     static const GLfloat P2[3] = { +1.73205081, -1.0, -1.0 };
@@ -108,10 +100,20 @@ void GLWidget::drawTriangle()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -10.0+zTra);
-    glRotatef(xRot, 1.0, 0.0, 0.0);
-    glRotatef(yRot, 0.0, 1.0, 0.0);
-    glRotatef(zRot, 0.0, 0.0, 1.0);
+    glTranslatef(0.0, 0.0, -50.0+zTra);
+//    if(isTest)
+//    {
+        glRotatef(xRot, 1.0, 0.0, 0.0);
+        glRotatef(yRot, 0.0, 1.0, 0.0);
+        glRotatef(zRot, 0.0, 0.0, 1.0);
+//    }
+//    else
+//    {
+//        glRotatef(Pitch,0,1,0);
+//        glRotatef(Yaw,sin(Pitch*AngToRad),0,cos(Pitch*AngToRad));
+//        glRotated(Roll,1,0,0);
+//    }
+
 
     for (int i = 0; i != 4; ++i) {
         //glLoadName(i);
@@ -122,17 +124,23 @@ void GLWidget::drawTriangle()
                        coords[i][j][2]);
         }
         glEnd();
+
     }
 }
 
-void GLWidget::drawObj()//draw obj
+void Widget::drawObj()//draw obj
 {
-        glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+//    drawTriangle();
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -10.0+zTra);
-    glRotatef(xRot, 1.0, 0.0, 0.0);
-    glRotatef(yRot, 0.0, 1.0, 0.0);
-    glRotatef(zRot, 0.0, 0.0, 1.0);
+    gluLookAt(radius*qCos(AngToRad*xRot), yRot, radius*qSin(AngToRad*xRot), 0, 0, 0, 0, 1, 0);
+
+//    glTranslatef(0.0, 0.0, -50.0+zTra);
+//    glRotatef(xRot, 1.0, 0.0, 0.0);
+//    glRotatef(yRot, 0.0, qCos(yRot*AngToRad), -qSin(yRot*AngToRad));
+//    glRotatef(xRot, 0.0,1.0,0.0);
+//    glRotatef(zRot, 0.0, 0.0, 1.0);
     glBegin(GL_TRIANGLES);
 qglColor(Qt::green);
     for(int i=0;i<ObjFace.length();i++){        
@@ -145,69 +153,19 @@ qglColor(Qt::green);
     glEnd();
 }
 
-void GLWidget::normalizeAngle(int *angle)
-{
-    while (*angle < 0)
-        angle += 360 * 16;
-    while (*angle > 360 *16)
-        angle -= 360 *16;
-}
-
-void GLWidget::setXRotation(int angle)
-{
-    normalizeAngle(&angle);
-    if ( angle != xRot ) {
-        xRot = angle;
-//        emit xRotationChanged(angle);
-        updateGL();
-    }
-}
-
-void GLWidget::setYRotation(int angle)
-{
-    normalizeAngle(&angle);
-    if ( angle != yRot ) {
-        yRot = angle;
-//        emit yRotationChanged(angle);
-        updateGL();
-    }
-}
-
-void GLWidget::setZRotation(int angle)
-{
-    normalizeAngle(&angle);
-    if ( angle != zRot ) {
-        zRot = angle;
-//        emit zRotationChanged(angle);
-        updateGL();
-    }
-}
-
-void GLWidget::alwaysRotate()
+void Widget::alwaysRotate()
 {
     zRot += 2;
-//    emit zRotationChanged(zRot);
     updateGL();
 }
 
-//void GLWidget::OpenObjFile()
-//{
-//    objfileDialog=new QFileDialog(this);
-//    objfileDialog->setWindowTitle(tr("Open ObjFile"));
-//    objfileDialog->setDirectory(".");
-//    objfileDialog->setFilter(tr("Obj Files(*.obj)"));
-//    if(objfileDialog->exec() == QDialog::Accepted) {
-//        objfilepath = objfileDialog->selectedFiles()[0];
-//    }
-//}
-
-void GLWidget::ImportObjFile(QString path)
-{    
-//    if(obj.Obj_Load(path,ObjFace)==1){
-//        isObjOn=true;
-//        timer->stop();
-//    }
-    ObjFace=obj.Obj_Load(path);
-    isObjOn=true;
-    timer->stop();
+void Widget::ImportObjFile(QString path)
+{
+    if(obj.Obj_Load(path,&ObjFace)==1){
+        isObjOn=true;
+        timer->stop();
+    }
+//    ObjFace=obj.Obj_Load(path);
+//    isObjOn=true;
+//    timer->stop();
 }

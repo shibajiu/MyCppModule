@@ -64,7 +64,7 @@ qSlicerMyCppModuleFooBarWidget
   Q_D(qSlicerMyCppModuleFooBarWidget);
   d->setupUi(this);
 //  d->pushButton->setText("Open ObjFile");
-  glWidget = new GLWidget;  
+  glWidget = new Widget;  
   d->scrollArea->setWidget(glWidget);
 
 }

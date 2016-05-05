@@ -35,7 +35,7 @@ private:
 protected:
     void initializeGL();
     void paintGL();
-    void resizeGL(int w, int h);
+    void resizeGL(int width, int height);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
@@ -53,6 +53,7 @@ private:
     int Pitch;
     int Roll;
     int zTra;
+    float mX,mY,mZ;
     double AngToRad;
     ObjLoad obj;
     bool isObjOn;

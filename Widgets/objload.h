@@ -125,11 +125,13 @@ public:
     int Obj_Load(QString ObjPath, QList<Face> *obj);
     QList<Face> Obj_Load(QString ObjPath);
     QList<float> Kalman(QList<int> prior, QList<int> z, QList<float> p, QList<float> Q, QList<float> R);
-    void unitest();//for test
+    void unittest(QString testobjname);//unit test
+    void getMaxXYZ(float *x,float *y,float *z);
+    void getMinXYZ(float *x,float *y,float *z);
 
 private:
     void init();
-    void isgetobj(QString ObjPath, int &objlength);
+    void isgetobj(QString ObjPath, int &objlength, float *tmX, float *tmY, float *tmZ);
 
 private:
     QList<Vertex> Vertices;

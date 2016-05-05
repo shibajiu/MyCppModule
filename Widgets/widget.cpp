@@ -11,6 +11,7 @@ Widget::Widget(QGLWidget *parent) :
         isObjOn=false;
         isTest=false;
         zTra=0;
+        mX=0;
 
         faceColors[0] = Qt::red;
         faceColors[1] = Qt::green;
@@ -19,8 +20,10 @@ Widget::Widget(QGLWidget *parent) :
 
         timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(alwaysRotate()));
-        timer->start(70);
-//        obj.unitest();
+//        timer->start(70);
+
+//        obj.unittest("4");//start unit test
+
         ImportObjFile("E:\\hit\\test\\testtriangle\\testtriangle\\2.obj");
 }
 
@@ -51,12 +54,16 @@ void Widget::paintGL()
     glFlush();
 }
 
-void Widget::resizeGL(int w, int h)
+void Widget::resizeGL(int width, int height)
 {
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(90.0f, (float)w / h, 1.0f, 1000.0f);
+    gluPerspective(50.0f, (float)width / height, 1.0f, 1000.0f);
+//    if (width <= height)
+//        glOrtho(-mX*2,mX*2, -mX*2 * (GLfloat)height/(GLfloat)width, mX*2 * (GLfloat)height/(GLfloat)width, -mX*2, mX*2);
+//    else
+//        glOrtho(-mX*2*(GLfloat)width/(GLfloat)height, mX*2*(GLfloat)width/(GLfloat)height, -mX*2, mX*2, -mX*2, mX*2);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -71,10 +78,10 @@ void Widget::mouseMoveEvent(QMouseEvent *event)
     int dy = event->y() - lastPos.y();
     yRot+=4 * dy;
     xRot+=4 * dx;
-    if (yRot>30.0f)
-        yRot=30.0f;
-    else if (yRot<-30.0f)
-        yRot=-30.0f;
+    if (yRot>1.5*mX)
+        yRot=1.5*mX;
+    else if (yRot<-1.5*mX)
+        yRot=-1.5*mX;
     updateGL();
 
     lastPos = event->pos();
@@ -87,17 +94,16 @@ void Widget::wheelEvent(QWheelEvent *event)
     updateGL();
 }
 
+static const GLfloat P1[3] = { 0.0, -1.0, +2.0 };
+static const GLfloat P2[3] = { +1.73205081, -1.0, -1.0 };
+static const GLfloat P3[3] = { -1.73205081, -1.0, -1.0 };
+static const GLfloat P4[3] = { 0.0, +2.0, 0.0 };
+
+static const GLfloat * const coords[4][3] = {
+    { P1, P2, P3 }, { P1, P3, P4 }, { P1, P4, P2 }, { P2, P4, P3 }
+};
 void Widget::drawTriangle()
 {
-    static const GLfloat P1[3] = { 0.0, -1.0, +2.0 };
-    static const GLfloat P2[3] = { +1.73205081, -1.0, -1.0 };
-    static const GLfloat P3[3] = { -1.73205081, -1.0, -1.0 };
-    static const GLfloat P4[3] = { 0.0, +2.0, 0.0 };
-
-    static const GLfloat * const coords[4][3] = {
-        { P1, P2, P3 }, { P1, P3, P4 }, { P1, P4, P2 }, { P2, P4, P3 }
-    };
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslatef(0.0, 0.0, -50.0+zTra);
@@ -164,6 +170,10 @@ void Widget::ImportObjFile(QString path)
     if(obj.Obj_Load(path,&ObjFace)==1){
         isObjOn=true;
         timer->stop();
+        obj.getMaxXYZ(&mX,&mY,&mZ);
+        mX=qMax(qMax(qAbs(mX),qAbs(mY)),qMax(qAbs(mY),qAbs(mZ)));
+        radius=2*mX;
+        QMessageBox::information(NULL, "Title", QString::number(mX), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
 //    ObjFace=obj.Obj_Load(path);
 //    isObjOn=true;

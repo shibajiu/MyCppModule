@@ -43,41 +43,8 @@ int ObjLoad::Obj_Load(QString ObjPath, QList<Face> *obj)
 
 QList<ObjLoad::Face> ObjLoad::Obj_Load(QString ObjPath)
 {
-    init();
     QList<Face> obj;
-    QStringList temp;
-
-    QFile ObjFile(ObjPath);
-    if(!ObjFile.open(QIODevice::ReadOnly|QIODevice::Text))
-        return obj;
-    QTextStream ObjStream(&ObjFile);
-    QString ObjLine;
-    while (!ObjStream.atEnd()) {//get vertices,faces,normals
-        ObjLine=ObjStream.readLine();
-        temp=ObjLine.split(" ");
-        if(temp[0]=="v") {
-            vertextemp.set(temp);
-            Vertices.append(vertextemp);
-            MaxPoint.findMaxAbs(vertextemp);
-            MinPoint.findMinAbs(vertextemp);
-        }
-        else if (temp[0]=="f") {
-            faceindextemp.set(temp);
-            Indexs.append(faceindextemp);
-        }
-        else if (temp[0]=="n") {
-            normaltemp.set(temp);
-            Normals.append(normaltemp);
-        }
-    }
-    ObjFile.close();//close file
-
-    int len=Indexs.length();
-    for(int i=0;i<len;++i){
-        facetemp.set(Vertices,Indexs[i]);
-        obj.append(facetemp);
-    }
-
+    Obj_Load(ObjPath,&obj);
     return obj;
 }
 
@@ -102,45 +69,37 @@ QList<float> ObjLoad::Kalman(QList<int> prior, QList<int> z, QList<float> p, QLi
     }
     return xpost;
 }
-void ObjLoad::unitest()
+
+void ObjLoad::unittest(QString testobjname)
 {
     int temp=0;
-    isgetobj("E:\\hit\\test\\testtriangle\\testtriangle\\2.obj",temp);
-QMessageBox::information(NULL, "unitest", QString::number(temp), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    float a,b,c;
+    isgetobj("E:\\hit\\test\\testtriangle\\testtriangle\\"+testobjname+".obj",temp,&a,&b,&c);
+QMessageBox::information(NULL, "unitest", QString("x is %1\ny is %2\nz is %3").arg(a).arg(b).arg(c), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 }
 
-void ObjLoad::isgetobj(QString ObjPath,int &objlength)
+void ObjLoad::getMaxXYZ(float *x, float *y, float *z)
 {
-    init();
-    QStringList temp;
+    *x=MaxPoint.x;
+    *y=MaxPoint.y;
+    *z=MaxPoint.z;
+}
 
-    QFile ObjFile(ObjPath);
-    if(!ObjFile.open(QIODevice::ReadOnly|QIODevice::Text))
-        return;
-    QTextStream ObjStream(&ObjFile);
-    QString ObjLine;
-    while (!ObjStream.atEnd()) {//get vertices,faces,normals
-        ObjLine=ObjStream.readLine();
-        temp=ObjLine.split(" ");
-        if(temp[0]=="v") {
-            vertextemp.set(temp);
-            Vertices.append(vertextemp);
-        }
-        else if (temp[0]=="f") {
-            faceindextemp.set(temp);
-            Indexs.append(faceindextemp);
-        }
-        else if (temp[0]=="n") {
-            normaltemp.set(temp);
-            Normals.append(normaltemp);
-        }
-    }
-    ObjFile.close();//close file
+void ObjLoad::getMinXYZ(float *x, float *y, float *z)
+{
+    *x=MinPoint.x;
+    *y=MinPoint.y;
+    *z=MinPoint.z;
+}
+
+void ObjLoad::isgetobj(QString ObjPath,int &objlength,float *tmX,float *tmY,float *tmZ)
+{
+    Obj_Load(ObjPath);
 
     objlength=Indexs.length();
+    getMaxXYZ(tmX,tmY,tmZ);
 //    for(int i=0;i<len;++i){
 //        facetemp.set(Vertices,Indexs[i]);
 //        obj.append(facetemp);
 //    }
 }
-
